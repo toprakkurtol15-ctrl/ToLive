@@ -2,24 +2,24 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Admin - Video Yükle</title>
+    <title>ToLive - Giriş ve Yükle</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body style="display:block; padding: 50px;">
+    <h1 style="text-align:center;">ToLive</h1>
     <div id="auth-section" class="form-container">
-        <h2>Giriş / Kayıt</h2>
-        <input type="email" id="email" placeholder="E-posta">
+        <h2>Kullanıcı Girişi</h2>
+        <input type="text" id="username" placeholder="Kullanıcı Adı">
         <input type="password" id="password" placeholder="Şifre">
         <button onclick="handleAuth('login')">Giriş Yap</button>
-        <button onclick="handleAuth('register')" style="background:#444">Kayıt Ol</button>
+        <button onclick="handleAuth('register')" style="background:#333">Hesap Oluştur</button>
     </div>
 
     <div id="upload-section" class="form-container" style="display:none;">
-        <h2>Video Yükle</h2>
+        <h2 id="welcome-msg"></h2>
         <input type="text" id="v-title" placeholder="Video Başlığı">
         <input type="file" id="v-file" accept="video/*">
-        <button id="up-btn" onclick="upload()">Yükle</button>
-        <p id="msg"></p>
+        <button id="up-btn" onclick="upload()">Paylaş</button>
     </div>
 
     <script type="module">
@@ -28,40 +28,45 @@
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = { /* AYNI CONFIG KODLARINI BURAYA YAPIŞTIR */ };
+        const firebaseConfig = { /* CONFIG */ };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const storage = getStorage(app);
         const db = getFirestore(app);
 
         window.handleAuth = (type) => {
-            const e = document.getElementById('email').value;
-            const p = document.getElementById('password').value;
-            if(type === 'login') signInWithEmailAndPassword(auth, e, p);
-            else createUserWithEmailAndPassword(auth, e, p);
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const fakeEmail = user + "@tolive.com"; // Arka planda e-postaya çeviriyoruz
+
+            if(type === 'login') signInWithEmailAndPassword(auth, fakeEmail, pass).catch(e => alert("Hatalı giriş!"));
+            else createUserWithEmailAndPassword(auth, fakeEmail, pass).then(() => alert("Kayıt Başarılı!"));
         };
 
         onAuthStateChanged(auth, user => {
             if(user) {
                 document.getElementById('auth-section').style.display = 'none';
                 document.getElementById('upload-section').style.display = 'block';
+                document.getElementById('welcome-msg').innerText = "Hoş geldin, " + user.email.split('@')[0];
             }
         });
 
         window.upload = async () => {
             const file = document.getElementById('v-file').files[0];
             const title = document.getElementById('v-title').value;
-            const btn = document.getElementById('up-btn');
-            btn.disabled = true; btn.innerText = "Yükleniyor...";
+            if(!file || !title) return alert("Boş alan bırakma!");
 
-            const sRef = ref(storage, 'videos/' + file.name);
+            const btn = document.getElementById('up-btn');
+            btn.innerText = "Yükleniyor..."; btn.disabled = true;
+
+            const sRef = ref(storage, 'videos/' + Date.now() + file.name);
             await uploadBytes(sRef, file);
             const url = await getDownloadURL(sRef);
 
             await addDoc(collection(db, "videos"), {
-                title: title, url: url, uploader: auth.currentUser.email
+                title: title, url: url, uploader: auth.currentUser.email.split('@')[0], date: new Date()
             });
-            alert("Başarılı!"); window.location.href = "index.html";
+            window.location.href = "index.html";
         };
     </script>
 </body>

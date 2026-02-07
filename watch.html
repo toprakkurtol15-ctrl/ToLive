@@ -2,21 +2,62 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>İzle</title>
+    <title>ToLive - İzle</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <nav class="navbar"><div class="logo">YouTube Klon</div></nav>
-    <div style="max-width: 900px; margin: 20px auto; padding: 10px;">
-        <video id="player" controls autoplay style="width:100%; border-radius:10px; background:#000;"></video>
-        <h2 id="title" style="margin-top:15px;"></h2>
-        <button onclick="history.back()" style="background:#333; color:white; border:none; padding:10px; margin-top:10px; cursor:pointer;">Geri Dön</button>
+    <nav class="navbar"><div class="logo">ToLive</div></nav>
+    <div class="watch-container">
+        <video id="player" controls autoplay></video>
+        <h2 id="v-title">Başlık</h2>
+        
+        <div class="video-bar">
+            <div class="uploader">
+                <span id="v-uploader" style="font-weight:bold;">Kullanıcı</span>
+                <button id="follow-btn" onclick="toggleFollow()">Takip Et</button>
+            </div>
+            <div class="actions">
+                <button onclick="toggleLike()"><i class="fa-solid fa-thumbs-up"></i> <span id="like-count">0</span></button>
+                <button onclick="share()"><i class="fa-solid fa-share"></i> Paylaş</button>
+            </div>
+        </div>
+
+        <div class="comment-section">
+            <h3>Yorumlar</h3>
+            <div class="comment-input">
+                <input type="text" id="c-text" placeholder="Yorum ekle...">
+                <button onclick="sendComment()">Gönder</button>
+            </div>
+            <div id="comment-list"></div>
+        </div>
     </div>
 
-    <script>
+    <script type="module">
+        // Firebase kütüphanelerini buraya ekle (Diğer sayfalardaki gibi)
+        // Like, Takip ve Yorum fonksiyonları Firestore'a veri yazar
         const params = new URLSearchParams(window.location.search);
         document.getElementById('player').src = params.get('url');
-        document.getElementById('title').innerText = params.get('title');
+        document.getElementById('v-title').innerText = params.get('title');
+        document.getElementById('v-uploader').innerText = params.get('uploader');
+
+        window.toggleLike = () => { 
+            let count = parseInt(document.getElementById('like-count').innerText);
+            document.getElementById('like-count').innerText = count + 1;
+            alert("Beğenildi!"); 
+        };
+        window.toggleFollow = () => {
+            const btn = document.getElementById('follow-btn');
+            btn.innerText = (btn.innerText === "Takip Et") ? "Takip Ediliyor" : "Takip Et";
+            btn.style.background = (btn.innerText === "Takip Et") ? "white" : "#333";
+        };
+        window.sendComment = () => {
+            const text = document.getElementById('c-text').value;
+            if(!text) return;
+            const list = document.getElementById('comment-list');
+            list.innerHTML = `<div class="comment"><b>Sen:</b> ${text}</div>` + list.innerHTML;
+            document.getElementById('c-text').value = "";
+        };
     </script>
 </body>
 </html>

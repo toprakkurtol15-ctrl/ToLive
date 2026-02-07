@@ -1,88 +1,172 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Benim YouTube Klonum</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
 
-    <nav class="navbar">
-        <div class="logo">
-            <i class="fa-brands fa-youtube" style="color: red; font-size: 30px;"></i>
-            <span>YouTube</span>
-        </div>
-        <div class="search-bar">
-            <input type="text" placeholder="Ara">
-            <button><i class="fa-solid fa-magnifying-glass"></i></button>
-        </div>
-        <div class="user-options">
-            <i class="fa-solid fa-video"></i>
-            <i class="fa-solid fa-bell"></i>
-            <div class="user-avatar">B</div>
-        </div>
-    </nav>
+body {
+    background-color: #0f0f0f;
+    color: white;
+}
 
-    <div class="container">
-        <aside class="sidebar">
-            <div class="nav-item active"><i class="fa-solid fa-house"></i> Ana Sayfa</div>
-            <div class="nav-item"><i class="fa-solid fa-fire"></i> Shorts</div>
-            <div class="nav-item"><i class="fa-solid fa-play"></i> Abonelikler</div>
-            <hr>
-            <div class="nav-item"><i class="fa-solid fa-book"></i> Kitaplık</div>
-            <div class="nav-item"><i class="fa-solid fa-clock-rotate-left"></i> Geçmiş</div>
-        </aside>
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    background-color: #0f0f0f;
+    z-index: 10;
+}
 
-        <main class="content">
-            <div class="video-card">
-                <div class="thumbnail">
-                    <img src="https://picsum.photos/300/170?random=1" alt="Video Kapak">
-                    <span class="duration">10:05</span>
-                </div>
-                <div class="video-info">
-                    <img src="https://picsum.photos/40/40?random=10" class="channel-icon">
-                    <div class="details">
-                        <h3>GitHub'da Site Nasıl Kurulur?</h3>
-                        <p>Kodlama Dünyası</p>
-                        <p>150B görüntüleme • 2 gün önce</p>
-                    </div>
-                </div>
-            </div>
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: bold;
+    font-size: 20px;
+}
 
-            <div class="video-card">
-                <div class="thumbnail">
-                    <img src="https://picsum.photos/300/170?random=2" alt="Video Kapak">
-                    <span class="duration">4:20</span>
-                </div>
-                <div class="video-info">
-                    <img src="https://picsum.photos/40/40?random=11" class="channel-icon">
-                    <div class="details">
-                        <h3>HTML ve CSS Dersleri #1</h3>
-                        <p>Web Hocası</p>
-                        <p>1.2M görüntüleme • 1 yıl önce</p>
-                    </div>
-                </div>
-            </div>
+.search-bar {
+    display: flex;
+    align-items: center;
+    background: #121212;
+    border: 1px solid #303030;
+    border-radius: 20px;
+    padding: 0 10px;
+    width: 40%;
+}
 
-            <div class="video-card">
-                <div class="thumbnail">
-                    <img src="https://picsum.photos/300/170?random=3" alt="Video Kapak">
-                    <span class="duration">8:45</span>
-                </div>
-                <div class="video-info">
-                    <img src="https://picsum.photos/40/40?random=12" class="channel-icon">
-                    <div class="details">
-                        <h3>Doğa Yürüyüşü Vlog</h3>
-                        <p>Gezgin Çift</p>
-                        <p>50B görüntüleme • 5 saat önce</p>
-                    </div>
-                </div>
-            </div>
+.search-bar input {
+    background: transparent;
+    border: none;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    outline: none;
+}
 
-            </main>
-    </div>
+.search-bar button {
+    background: #222;
+    border: none;
+    padding: 10px 20px;
+    color: gray;
+    border-radius: 0 20px 20px 0;
+    cursor: pointer;
+}
 
-</body>
-</html>
+.user-options {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 20px;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    background-color: purple;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 32px;
+    font-size: 16px;
+}
+
+/* Ana Düzen */
+.container {
+    display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 240px;
+    background-color: #0f0f0f;
+    height: 100vh;
+    padding-top: 10px;
+    position: fixed;
+    top: 60px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.nav-item:hover {
+    background-color: #272727;
+    border-radius: 10px;
+}
+
+.nav-item.active {
+    background-color: #272727;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+/* İçerik Alanı */
+.content {
+    margin-left: 240px;
+    padding: 20px;
+    width: 100%;
+    display: grid;
+    /* Grid yapısı: Ekran boyutuna göre otomatik sığdırır */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* Video Kartları */
+.video-card {
+    cursor: pointer;
+}
+
+.thumbnail {
+    position: relative;
+    width: 100%;
+}
+
+.thumbnail img {
+    width: 100%;
+    border-radius: 12px;
+}
+
+.duration {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 3px 5px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.video-info {
+    display: flex;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+.channel-icon {
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+}
+
+.details h3 {
+    font-size: 16px;
+    margin-bottom: 5px;
+    line-height: 1.2;
+}
+
+.details p {
+    font-size: 14px;
+    color: #aaa;
+}

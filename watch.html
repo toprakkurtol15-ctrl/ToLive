@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>İzle</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar"><div class="logo">YouTube Klon</div></nav>
+    <div style="max-width: 900px; margin: 20px auto; padding: 10px;">
+        <video id="player" controls autoplay style="width:100%; border-radius:10px; background:#000;"></video>
+        <h2 id="title" style="margin-top:15px;"></h2>
+        <button onclick="history.back()" style="background:#333; color:white; border:none; padding:10px; margin-top:10px; cursor:pointer;">Geri Dön</button>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        document.getElementById('player').src = params.get('url');
+        document.getElementById('title').innerText = params.get('title');
+    </script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Klon - Ana Sayfa</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo"><i class="fa-brands fa-youtube" style="color: red;"></i> <span>YouTube</span></div>
+        <div class="search-bar"><input type="text" placeholder="Ara"><button><i class="fa-solid fa-magnifying-glass"></i></button></div>
+        <div class="user-options">
+            <a href="admin.html" class="upload-link"><i class="fa-solid fa-video"></i> Yükle</a>
+            <div class="user-avatar">G</div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="nav-item active"><i class="fa-solid fa-house"></i> Ana Sayfa</div>
+            <div class="nav-item"><i class="fa-solid fa-play"></i> Abonelikler</div>
+            <hr>
+            <div class="nav-item"><i class="fa-solid fa-clock-rotate-left"></i> Geçmiş</div>
+        </aside>
+
+        <main class="content" id="video-grid">
+            <p>Videolar yükleniyor...</p>
+        </main>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "SENIN_API_KEY",
+            authDomain: "SENIN_AUTH_DOMAIN",
+            projectId: "SENIN_PROJECT_ID",
+            storageBucket: "SENIN_STORAGE_BUCKET",
+            messagingSenderId: "SENIN_SENDER_ID",
+            appId: "SENIN_APP_ID"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function loadVideos() {
+            const querySnapshot = await getDocs(collection(db, "videos"));
+            const grid = document.getElementById('video-grid');
+            grid.innerHTML = "";
+
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                grid.innerHTML += `
+                    <div class="video-card" onclick="window.location.href='watch.html?url=${encodeURIComponent(data.url)}&title=${encodeURIComponent(data.title)}'">
+                        <div class="thumbnail">
+                            <img src="https://picsum.photos/300/170?random=${doc.id}">
+                        </div>
+                        <div class="video-info">
+                            <div class="details">
+                                <h3>${data.title}</h3>
+                                <p>${data.uploader}</p>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+        }
+        loadVideos();
+    </script>
+</body>
+</html>
